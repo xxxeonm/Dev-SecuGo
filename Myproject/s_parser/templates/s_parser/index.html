@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<br>
+
+    <textarea id="text"></textarea>
+    <br><br>
+<input type="button" value="scan" id="btn" >{% csrf_token %}</input>
+<input type="button" value="코드검사" id="combtn">
+<h1 id="a"  ></h1><br>
+
+
+<p id="content">
+<script src="http://code.jquery.com/jquery-1.11.2.min.js"></script>
+<script src="http://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+
+<script type="text/javascript" language="javascript">
+    $("#combtn").on("click", function () {
+       var form = document.createElement('form');
+       var obj = document.createElement('input');
+       obj.setAttribute('name','text');
+       obj.setAttribute('type','hidden');
+       obj.setAttribute('value',$('#text').val());
+       form.setAttribute('method','get');
+       form.setAttribute('action','{% url "Myapp:compare" %}');
+       form.appendChild(obj);
+       document.body.appendChild(form);
+       form.submit();
+
+    });
+
+      $("#btn").on("click", function(){
+          var csrftoken = $("[name=csrfmiddlewaretoken]").val();
+
+        function csrfSafeMethod(method) {
+    // these HTTP methods do not require CSRF protection
+    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+}
+$.ajaxSetup({
+    beforeSend: function(xhr, settings) {
+        if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+            xhr.setRequestHeader("X-CSRFToken", csrftoken);
+        }
+    }
+});
+        var con = $('#text').val()
+          $.ajax({
+              type: "post",
+              url: "pro",
+
+              data: {
+                  'a' : con
+              },
+              dataType: "text",
+              success: function (response) {
+                  $("#text").text('');
+                  $("#a").text(response);
+
+              }
+          });
+      });
+
+
+
+</script>
+
+
+
+
+
+
+</body>
+</html>

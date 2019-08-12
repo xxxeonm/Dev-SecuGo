@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'Myapp',
+    's_parser'
 ]
 
 MIDDLEWARE = [
@@ -78,16 +79,16 @@ WSGI_APPLICATION = 'Myproject.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'secugo2',
-        'USER': 'root',
+        'NAME': 'secugo',
+        'USER': 'secugo',
         'PASSWORD': 'password',
         'HOST': 'localhost',
         'PORT': '3306',
     },
     'compareSource':{
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'secugo2',
-        'USER': 'root',
+        'NAME': 'secugo',
+        'USER': 'secugo',
         'PASSWORD': 'password',
         'HOST': 'localhost',
         'PORT': '3306',

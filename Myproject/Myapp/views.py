@@ -97,7 +97,7 @@ def Know(text):
 
 
 def db_compare(comparesource):
-    conn = pymysql.connect(host='localhost', user='root', password='password', db='test1', charset='utf8')
+    conn = pymysql.connect(host='localhost', user='secugo', password='password', db='test1', charset='utf8')
     curs = conn.cursor(pymysql.cursors.DictCursor)
     sql = "select * from test"
     number_of_rows = curs.execute(sql)
@@ -172,4 +172,3 @@ def pro(request):
     cont = request.POST.get('a')
 
     return HttpResponse(source(cont))
-
