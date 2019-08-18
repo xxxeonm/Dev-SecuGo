@@ -17,25 +17,30 @@ from bs4 import BeautifulSoup
 from s_parser.models import AllLanguages
 from s_parser.models import BlogData
 
+class ClassLink:
+    class_name = ""
+    link = ""
+
+    def __init__(self, class_name, link):
+        self.class_name = class_name
+        self.link = link
 
 class ClassInfo:
     language_name = ""
     class_name = ""
-    # method_name = ""
+    method_name = ""
     param_name = ""
     link = ""
     score = ""
     pub_date = ""
     etc = ""
 
-    def __init__(self, language_name, class_name, param_name, link, score, pub_date, etc):
+    def __init__(self, language_name, class_name, method_name, param_name, link, score, pub_date, etc):
         self.language_name = language_name
         self.class_name = class_name
+        self.method_name = method_name
         self.param_name = param_name
         self.link = link
-        self.score = score
-        self.pub_date = pub_date
-        self.etc = etc
 
 
 # bs4 ver.
@@ -59,28 +64,41 @@ class ClassInfo:
 def parse_info():
     base_url = 'https://docs.oracle.com/javase/10/docs/api/allclasses-noframe.html'
     driver = wd.Chrome(executable_path='/usr/local/bin/chromedriver')
+
+    ### access site [GET]
     driver.get(base_url)
-
     ### implicit waits
-    driver.implicitly_wait(10)
+    driver.implicitly_wait(5)
 
-    class_list = driver.find_elements_by_css_selector('li')
-    for class_item in class_list:
-        print("ALL:::class_name", class_item.text)
-        print("ALL:::link:::", class_item.find_element_by_css_selector('a').get_attribute('href'))
+    ### scrap class name and link to detail page
+    class_link_list = driver.find_elements_by_css_selector('li')
+    class_link_data = []; i = 0;
+    for class_link_item in class_link_list:
+        print(i, "ALL:::class_name:::", class_link_item.text) ### class name
+        print(i, "ALL:::link:::", class_link_item.find_element_by_css_selector('a').get_attribute('href')) ### link
+        class_link_data.append(ClassLink(class_name=class_link_item.text, link=class_link_item.find_element_by_css_selector('a').get_attribute('href')))
+        i += 1
+        if i >= 20: break
+
+
+    class_data = []; j = 0;
+    for class_item in class_link_data:
 
         ### access detail class page
-        driver.get(class_item.find_element_by_css_selector('a').get_attribute('href'))
+        driver.get(class_item.link)
         ### implicit waits
-        driver.implicitly_wait(10)
+        driver.implicitly_wait(5)
 
         method_summary = driver.find_element_by_id('method.summary')
         if (method_summary.find_element_by_xpath("..").find_elements_by_tag_name('table')):
-            print("DETAIL:::class_name:::", driver.find_element_by_css_selector('.header>.title').text)
+            print(j, "DETAIL:::class_name:::", driver.find_element_by_css_selector('.header>.title').text)
         else:
-            print("NO 'MEMEBER_SUMMARY' TABLE")
+            print(j, "NO 'MEMEBER_SUMMARY' TABLE")
 
+        j += 1
         driver.back()
+
+    driver.quit()
 
 
 ## 이 명령어는 이 파일이 import가 아닌 python에서 직접 실행할 경우에만 아래 코드가 동작하도록 합니다.
