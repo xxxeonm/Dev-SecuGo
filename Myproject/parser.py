@@ -71,31 +71,47 @@ def parse_info():
     driver.implicitly_wait(5)
 
     ### scrap class name and link to detail page
-    class_link_list = driver.find_elements_by_css_selector('li')
-    class_link_data = []; i = 0;
-    for class_link_item in class_link_list:
-        print(i, "ALL:::class_name:::", class_link_item.text) ### class name
-        print(i, "ALL:::link:::", class_link_item.find_element_by_css_selector('a').get_attribute('href')) ### link
-        class_link_data.append(ClassLink(class_name=class_link_item.text, link=class_link_item.find_element_by_css_selector('a').get_attribute('href')))
+    link_list = driver.find_elements_by_css_selector('li')
+    link_data = []; i = 0;
+    for link_item in link_list:
+        print(i, "ALL:::class_name:::", link_item.text) ### class name
+        print(i, "ALL:::link:::", link_item.find_element_by_css_selector('a').get_attribute('href')) ### link
+        link_data.append(ClassLink(class_name=link_item.text, link=link_item.find_element_by_css_selector('a').get_attribute('href')))
         i += 1
         if i >= 20: break
 
 
-    class_data = []; j = 0;
-    for class_item in class_link_data:
+    class_data = []; i = 0;
+    for class_item in link_data:
 
         ### access detail class page
         driver.get(class_item.link)
         ### implicit waits
         driver.implicitly_wait(5)
 
-        method_summary = driver.find_element_by_id('method.summary')
-        if (method_summary.find_element_by_xpath("..").find_elements_by_tag_name('table')):
-            print(j, "DETAIL:::class_name:::", driver.find_element_by_css_selector('.header>.title').text)
-        else:
-            print(j, "NO 'MEMEBER_SUMMARY' TABLE")
+        if (driver.find_element_by_id('method.summary').find_element_by_xpath("..").find_elements_by_tag_name('table')):
+            method_data = driver.find_element_by_id('method.summary').find_element_by_xpath("..").find_element_by_tag_name('table')
+            print(i, "DETAIL:::class_name:::", class_item.class_name)
+            print(i, "DETAIL:::link:::", class_item.link)
 
-        j += 1
+            method_list = method_data.find_elements_by_class_name('colSecond')
+            for j in range(1, len(method_list)):
+                print(method_list[j].text)
+                ### pre-process method name
+
+            # print(i, "DETAIL:::method_name:::", class_item.link)
+            # print(i, "DETAIL:::param_name:::", class_item.link)
+            # class_data.append(ClassInfo(
+            #     language_name='java',
+            #     class_name=class_item.class_name,
+            #     link=class_item.link,
+            #     method_name=,
+            #     param_name=
+            # ))
+        else:
+            print(i, "NO 'MEMEBER_SUMMARY' TABLE")
+
+        i += 1
         driver.back()
 
     driver.quit()
