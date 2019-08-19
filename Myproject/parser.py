@@ -13,6 +13,7 @@ from selenium.webdriver.support import expected_conditions as EC
 import requests
 from bs4 import BeautifulSoup
 
+from django.utils import timezone
 
 from s_parser.models import AllLanguages
 from s_parser.models import BlogData
@@ -35,12 +36,18 @@ class ClassInfo:
     pub_date = ""
     etc = ""
 
+    def toString(self):
+        print("LAN:", self.language_name, "CLASS:", self.class_name, "METHOD:", self.method_name, "PARAM:", self.param_name, "LINK:", self.link)
+
     def __init__(self, language_name, class_name, method_name, param_name, link, score, pub_date, etc):
         self.language_name = language_name
         self.class_name = class_name
         self.method_name = method_name
         self.param_name = param_name
         self.link = link
+        self.score = score
+        self.pub_date = pub_date
+        self.etc = etc
 
 
 # bs4 ver.
@@ -75,10 +82,11 @@ def parse_info():
     link_data = []; i = 0;
     for link_item in link_list:
         print(i, "ALL:::class_name:::", link_item.text) ### class name
-        print(i, "ALL:::link:::", link_item.find_element_by_css_selector('a').get_attribute('href')) ### link
+        # print(i, "ALL:::link:::", link_item.find_element_by_css_selector('a').get_attribute('href')) ### link
         link_data.append(ClassLink(class_name=link_item.text, link=link_item.find_element_by_css_selector('a').get_attribute('href')))
         i += 1
-        if i >= 20: break
+        # TODO: remove flag
+        if i >= 5: break
 
 
     class_data = []; i = 0;
@@ -91,35 +99,52 @@ def parse_info():
 
         if (driver.find_element_by_id('method.summary').find_element_by_xpath("..").find_elements_by_tag_name('table')):
             method_data = driver.find_element_by_id('method.summary').find_element_by_xpath("..").find_element_by_tag_name('table')
-            print(i, "DETAIL:::class_name:::", class_item.class_name)
-            print(i, "DETAIL:::link:::", class_item.link)
+            # print(i, "DETAIL:::class_name:::", class_item.class_name)
+            # print(i, "DETAIL:::link:::", class_item.link)
 
             method_list = method_data.find_elements_by_class_name('colSecond')
             for j in range(1, len(method_list)):
-                print(method_list[j].text)
                 ### pre-process method name
+                # print(method_list[j].text[0:method_list[j].text.find('(')]) ### method name
+                # print(method_list[j].text[method_list[j].text.find('(') + 1:-1]) ### parameter name
 
-            # print(i, "DETAIL:::method_name:::", class_item.link)
-            # print(i, "DETAIL:::param_name:::", class_item.link)
-            # class_data.append(ClassInfo(
-            #     language_name='java',
-            #     class_name=class_item.class_name,
-            #     link=class_item.link,
-            #     method_name=,
-            #     param_name=
-            # ))
+                class_data.append(ClassInfo(
+                    language_name='java',
+                    class_name=class_item.class_name,
+                    link=class_item.link,
+                    method_name=method_list[j].text[0:method_list[j].text.find('(')],
+                    param_name=method_list[j].text[method_list[j].text.find('(') + 1:-1],
+                    # TODO: edit score?, pub_date, etc
+                    score=-1,
+                    pub_date=timezone.now(),
+                    etc=""
+                ))
         else:
             print(i, "NO 'MEMEBER_SUMMARY' TABLE")
 
         i += 1
         driver.back()
 
+    driver.close()
     driver.quit()
 
+    return class_data
 
-## 이 명령어는 이 파일이 import가 아닌 python에서 직접 실행할 경우에만 아래 코드가 동작하도록 합니다.
+# 이 명령어는 이 파일이 import가 아닌 python에서 직접 실행할 경우에만 아래 코드가 동작하도록 합니다.
 if __name__=='__main__':
-    parse_info()
     # blog_data_dict = parse_info()
-    # for t, l in blog_data_dict.items():
-    #     BlogData(title=t, link=l).save()
+    # for i in blog_data_dict:
+    #     BlogData(title=i.class_name, link=i.link).save()
+    all_languages_list = parse_info()
+    for item in all_languages_list:
+        item.toString()
+        AllLanguages(
+            languageName=item.language_name,
+            className=item.class_name,
+            methodName=item.method_name,
+            parameterName=item.param_name,
+            link=item.link,
+            score=item.score,
+            pub_date=item.pub_date,
+            etc=item.etc
+        ).save()
