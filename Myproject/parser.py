@@ -86,7 +86,7 @@ def parse_info():
         link_data.append(ClassLink(class_name=link_item.text, link=link_item.find_element_by_css_selector('a').get_attribute('href')))
         i += 1
         # TODO: remove flag
-        if i >= 5: break
+        if i >= 10: break
 
 
     class_data = []; i = 0;
@@ -104,14 +104,13 @@ def parse_info():
 
             method_list = method_data.find_elements_by_class_name('colSecond')
             for j in range(1, len(method_list)):
-                ### pre-process method name
-                # print(method_list[j].text[0:method_list[j].text.find('(')]) ### method name
-                # print(method_list[j].text[method_list[j].text.find('(') + 1:-1]) ### parameter name
-
+                print(method_list[j].text)
+                ### insert class data into ClassInfo Object List
                 class_data.append(ClassInfo(
                     language_name='java',
                     class_name=class_item.class_name,
                     link=class_item.link,
+                    ### pre-process method info
                     method_name=method_list[j].text[0:method_list[j].text.find('(')],
                     param_name=method_list[j].text[method_list[j].text.find('(') + 1:-1],
                     # TODO: edit score?, pub_date, etc
@@ -124,6 +123,8 @@ def parse_info():
 
         i += 1
         driver.back()
+        ### implicit waits
+        driver.implicitly_wait(5)
 
     driver.close()
     driver.quit()
