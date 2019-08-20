@@ -3,8 +3,9 @@ from django.db import models
 # Create your models here.
 
 class AllLanguages(models.Model):
-    languageName = models.CharField(primary_key=True,blank=True,max_length=200)
+    languageName = models.CharField(max_length=200) #primary_key=True,blank=True,
     className = models.CharField(max_length=200)
+    methodName = models.CharField(max_length=200)
     parameterName = models.CharField(max_length=200)
     link = models.URLField(default=0)
     score = models.IntegerField(default=0)
