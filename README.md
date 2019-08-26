@@ -30,6 +30,15 @@ To address this, Secugo will creates a "test case."
 Installation
 ---------------
 
+To install, use pip or easy_install:
+
+pip install --upgrade ibm-watson
+or
+
+easy_install --upgrade ibm-watson
+Note the following: a) Versions prior to 3.0.0 can be installed using:
+
+pip install --upgrade watson-developer-cloud
 
 <br><br>
 
@@ -93,9 +102,9 @@ https://youtu.be/q5pMkLwJ0EE
 
 Development environment
 ------------------------
-+ Python 3.6.5
-+ Django
-+ MySQL
++ Python 3.6.5 or above
++ Django 2.0.x
++ MariaDB
 
 <br><br>
 
