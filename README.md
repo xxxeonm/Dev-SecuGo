@@ -27,6 +27,12 @@ To address this, Secugo will creates a "test case."
  SecuGo는 이를 해소하기 위하여 “테스트 케이스” 생성 컨텐츠를 만들어 보고자 합니다.
 <br><br>
 
+Installation
+---------------
+
+
+<br><br>
+
 Development Background
 -----------------------
 - Mass data generation, as it is called IT consumption. Many of these cyber attacks are also on the rise.
