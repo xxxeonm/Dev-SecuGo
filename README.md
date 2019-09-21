@@ -27,6 +27,21 @@ To address this, Secugo will creates a "test case."
  SecuGo는 이를 해소하기 위하여 “테스트 케이스” 생성 컨텐츠를 만들어 보고자 합니다.
 <br><br>
 
+Installation
+---------------
+
+To install, use pip or easy_install:
+
+pip install --upgrade ibm-watson
+or
+
+easy_install --upgrade ibm-watson
+Note the following: a) Versions prior to 3.0.0 can be installed using:
+
+pip install --upgrade watson-developer-cloud
+
+<br><br>
+
 Development Background
 -----------------------
 - Mass data generation, as it is called IT consumption. Many of these cyber attacks are also on the rise.
@@ -87,9 +102,9 @@ https://youtu.be/q5pMkLwJ0EE
 
 Development environment
 ------------------------
-+ Python 3.6.5
-+ Django
-+ MySQL
++ Python 3.6.5 or above
++ Django 2.0.x
++ MariaDB
 
 <br><br>
 

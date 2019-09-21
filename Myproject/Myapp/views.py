@@ -4,10 +4,9 @@ from .models  import Data
 from django.views.decorators.csrf import csrf_exempt,csrf_protect
 import json
 from django.http import HttpResponseRedirect
-from watson_developer_cloud import NaturalLanguageUnderstandingV1
 from django.views.decorators.csrf import csrf_exempt
-from watson_developer_cloud.natural_language_understanding_v1 \
-  import Features, EntitiesOptions, KeywordsOptions
+from ibm_watson import NaturalLanguageUnderstandingV1
+from ibm_watson.natural_language_understanding_v1 import Features, EntitiesOptions, KeywordsOptions
 import pymysql
 
 
@@ -32,9 +31,10 @@ semantic_roles = []
 
 def Know(text):
     natural_language_understanding = NaturalLanguageUnderstandingV1(
-        username='acdb979b-4643-461e-a34f-02ff2271210a',
-        password='5xDqzWdlyeao',
-        version='2018-03-16')
+    version='2019-07-12',
+    iam_apikey='FZxffQMR704hKD0dgFXEC8T0L0FFkhWzNImrOWPG6ZVh',
+    url='https://gateway.watsonplatform.net/natural-language-understanding/api'
+    )
 
     response = natural_language_understanding.analyze(
         text= text,
