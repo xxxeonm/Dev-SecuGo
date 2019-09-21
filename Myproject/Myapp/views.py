@@ -10,6 +10,8 @@ from watson_developer_cloud.natural_language_understanding_v1 \
   import Features, EntitiesOptions, KeywordsOptions
 import pymysql
 
+def index(request):
+    return render(request, 'templates/index.html')
 
 source = ''
 Content = {
@@ -157,13 +159,13 @@ def source(te):
     return te.split(";")[0]
 
 
-def index(request):
-    return render(request, 'tem.html')
+def codeform(request):
+    return render(request, 'templates/tem.html')
 
 
 def compare(request):
     data = request.GET['text']
-    return render(request, 'comparecode.html',{"source" : db_compare(data)})
+    return render(request, 'templates/comparecode.html',{"source" : db_compare(data)})
 
 
 def pro(request):
