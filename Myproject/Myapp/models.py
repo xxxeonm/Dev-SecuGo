@@ -1,6 +1,5 @@
 from django.db import models
 
-
 class Data(models.Model):
     seq = models.IntegerField(primary_key=True,blank=True)
     keywords = models.CharField(max_length=128,null=True,blank=True)
