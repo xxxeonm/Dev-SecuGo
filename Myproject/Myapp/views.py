@@ -1,13 +1,12 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from .models  import Data
+from .models import Data
 from django.views.decorators.csrf import csrf_exempt,csrf_protect
 import json
 from django.http import HttpResponseRedirect
-from watson_developer_cloud import NaturalLanguageUnderstandingV1
 from django.views.decorators.csrf import csrf_exempt
-from watson_developer_cloud.natural_language_understanding_v1 \
-  import Features, EntitiesOptions, KeywordsOptions
+from ibm_watson import NaturalLanguageUnderstandingV1
+from ibm_watson.natural_language_understanding_v1 import Features, EntitiesOptions, KeywordsOptions
 import pymysql
 
 def index(request):
@@ -32,36 +31,39 @@ semantic_roles = []
 
 
 
-def Know(text):
+def learn(request):
     natural_language_understanding = NaturalLanguageUnderstandingV1(
-        username='acdb979b-4643-461e-a34f-02ff2271210a',
-        password='5xDqzWdlyeao',
-        version='2018-03-16')
+        version='2019-07-12',
+        iam_apikey='FZxffQMR704hKD0dgFXEC8T0L0FFkhWzNImrOWPG6ZVh',
+        url='https://gateway.watsonplatform.net/natural-language-understanding/api'
+    )
+    textinput = request.POST.get('a')
 
     response = natural_language_understanding.analyze(
-        text= text,
+        text=textinput,
         features=Features(
-        entities=EntitiesOptions(
-        emotion=False,
-
-        ),
-        categories=EntitiesOptions(
-        emotion=False,
-        ),
-        semantic_roles=EntitiesOptions(
-      emotion=False,
-      sentiment=False,
-      ),
-    keywords=KeywordsOptions(
-      emotion=False,
-      sentiment=False,
-      )))
+            entities=EntitiesOptions(
+               emotion=False,
+            ),
+            categories=EntitiesOptions(
+                emotion=False,
+            ),
+            semantic_roles=EntitiesOptions(
+                emotion=False,
+                sentiment=False,
+            ),
+            keywords=KeywordsOptions(
+                emotion=False,
+                sentiment=False,
+            )
+        )
+    )
 
     re = response
 
-    semantic_roles.append(json.dumps(re['semantic_roles'][0]['sentence']))
+    semantic_roles.append(json.dumps(re.result['semantic_roles'][0]['sentence']))
     for h in ['keywords','entities','categories']:
-        for i in re[h]:
+        for i in re.result[h]:
             try:
                 try:
                     if (float(json.dumps(i['relevance'])) > 0.3):
@@ -75,7 +77,6 @@ def Know(text):
                         Content[h]['score'].append(i['relevance'])
                     else:
                         pass
-
             except:
                 try:
                     if (float(json.dumps(i['score'])) > 0.3):
@@ -96,7 +97,10 @@ def Know(text):
                 categories=Content['categories']['text'],
                 desc=semantic_roles[0].__str__().split('"'), source='', etc='')
     data.save()
-
+    print("saved!")
+    reset(Content)
+    cont = request.POST.get('a')
+    return HttpResponse(source(cont))
 
 def db_compare(comparesource):
     conn = pymysql.connect(host='localhost', user='secugo', password='password', db='test1', charset='utf8')
@@ -170,7 +174,4 @@ def compare(request):
 
 def pro(request):
 
-    reset(Content)
-    cont = request.POST.get('a')
 
-    return HttpResponse(source(cont))
