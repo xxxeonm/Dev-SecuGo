@@ -4,5 +4,7 @@ app_name="Myapp"
 urlpatterns = [
     path('', views.index, name="index"),
     path('learn', views.learn ,name="learn"),
+    path('codeform', views.codeform, name="codeform"),
+    path('pro', views.pro ,name="pro"),
     path('compare', views.compare,name="compare"),
 ]
