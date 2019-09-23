@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-<<<<<<< HEAD:Myproject/Myapp/tem.html
 <body>
     <form>
         {% csrf_token %}
@@ -16,22 +15,6 @@
 </body>
 <script src="http://code.jquery.com/jquery-1.11.2.min.js"></script>
 <script src="http://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
-=======
-
-<br>
-
-    <textarea id="text"></textarea>
-    <br><br>
-<input type="button" value="scan" id="btn" >{% csrf_token %}</input>
-<input type="button" value="코드검사" id="combtn">
-<h1 id="a"  ></h1><br>
-
-
-<p id="content">
-<script src="http://code.jquery.com/jquery-1.11.2.min.js"></script>
-<script src="http://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
-
->>>>>>> 5413fde5e9e80d7ede6b06fbcda3f2af43e0edd5:Myproject/Myapp/templates/tem.html
 <script type="text/javascript" language="javascript">
     $("#combtn").on("click", function () {
        var form = document.createElement('form');
@@ -47,7 +30,6 @@
 
     });
 
-<<<<<<< HEAD:Myproject/Myapp/tem.html
     $("#learnbtn").on("click", function(){
         var csrftoken = $("[name=csrfmiddlewaretoken]").val();
         function csrfSafeMethod(method) {
@@ -66,27 +48,6 @@
         $.ajax({
               type: "post",
               url: "learn",
-=======
-      $("#btn").on("click", function(){
-          var csrftoken = $("[name=csrfmiddlewaretoken]").val();
-
-        function csrfSafeMethod(method) {
-    // these HTTP methods do not require CSRF protection
-    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
-}
-$.ajaxSetup({
-    beforeSend: function(xhr, settings) {
-        if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
-            xhr.setRequestHeader("X-CSRFToken", csrftoken);
-        }
-    }
-});
-        var con = $('#text').val()
-          $.ajax({
-              type: "post",
-              url: "pro",
-
->>>>>>> 5413fde5e9e80d7ede6b06fbcda3f2af43e0edd5:Myproject/Myapp/templates/tem.html
               data: {
                   'a' : con
               },
@@ -94,21 +55,8 @@ $.ajaxSetup({
               success: function (response) {
                   $("#text").text('');
                   $("#a").text(response);
-<<<<<<< HEAD:Myproject/Myapp/tem.html
               }
           });
       });
 </script>
-=======
-
-              }
-          });
-      });
-
-
-
-</script>
-
-</body>
->>>>>>> 5413fde5e9e80d7ede6b06fbcda3f2af43e0edd5:Myproject/Myapp/templates/tem.html
 </html>
