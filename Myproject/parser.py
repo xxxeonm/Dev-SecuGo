@@ -47,6 +47,7 @@ class ClassInfo:
 # selenium ver.
 def parse_info_php():
     base_url = "https://www.php.net/manual/en/reserved.interfaces.php"
+    #Must input your chromedriver path below!!
     driver = wd.Chrome(executable_path='/usr/local/bin/chromedriver')
 
     ### access site [GET]
@@ -92,6 +93,7 @@ def parse_info_php():
 
 def parse_info_java():
     base_url = 'https://docs.oracle.com/javase/10/docs/api/allclasses-noframe.html'
+    #Must input your chromedriver path below!!
     driver = wd.Chrome(executable_path='/usr/local/bin/chromedriver')
 
     ### access site [GET]

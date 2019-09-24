@@ -30,15 +30,17 @@ To address this, Secugo will creates a "test case."
 Installation
 ---------------
 
+1. IBM Watson
 To install, use pip or easy_install:
-
 pip install --upgrade ibm-watson
 or
-
 easy_install --upgrade ibm-watson
 Note the following: a) Versions prior to 3.0.0 can be installed using:
-
 pip install --upgrade watson-developer-cloud
+
+2. Crawler(Selenium,Chromedrive)
+pip install selenium
+https://sites.google.com/a/chromium.org/chromedriver/downloads
 
 <br><br>
 
@@ -116,5 +118,6 @@ Used API
 
 License
 --------------
-© All rights reserved. Thanks team. Seongbeom Park. Wonhee Jeong. Seungkyu Lee. Heesui Jang.
+© All rights reserved. 
+Thanks team. Seongbeom Park. Wonhee Jeong. Seungkyu Lee. Heesui Jang. Sunmin Han. Hwajin Lee. Minchul Kang.
 * 본 프로젝트는 한이음 멘토링 프로젝트로 진행되었습니다.

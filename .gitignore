@@ -103,3 +103,11 @@ venv.bak/
 # mypy
 .mypy_cache/
 .vscode/settings.json
+Myproject/myvenv/bin/python
+Myproject/Myapp/views.py
+Myproject/Myproject/settings.py
+Myproject/myvenv/pyvenv.cfg
+Myproject/myvenv/bin/activate
+Myproject/myvenv/bin/activate.csh
+Myproject/myvenv/bin/activate.fish
+Myproject/myvenv/bin/python3

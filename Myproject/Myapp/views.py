@@ -7,7 +7,6 @@ from django.http import HttpResponseRedirect
 from django.views.decorators.csrf import csrf_exempt
 from ibm_watson import NaturalLanguageUnderstandingV1
 from ibm_watson.natural_language_understanding_v1 import Features, EntitiesOptions, KeywordsOptions
-import pymysql
 
 def index(request):
     return render(request, 'templates/index.html')
@@ -173,5 +172,6 @@ def compare(request):
 
 
 def pro(request):
+    return render(request, 'templates/tem.html')
 
 
