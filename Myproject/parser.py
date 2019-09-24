@@ -6,12 +6,6 @@ import django
 django.setup()
 
 from selenium import webdriver as wd
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-
-import requests
-from bs4 import BeautifulSoup
 
 from django.utils import timezone
 
@@ -50,25 +44,53 @@ class ClassInfo:
         self.etc = etc
 
 
-# bs4 ver.
-# def parse_link():
-#     req = requests.get('https://docs.oracle.com/javase/10/docs/api/allclasses-noframe.html')
-#     html = req.text
-#     soup = BeautifulSoup(html, 'html.parser')
-#
-#     class_list = soup.select('li > a')
-#
-#     data = {}
-#     for class_item in class_list:
-#         print("ALL:::", class_item.text, "LINK:::", class_item.get('href'))
-#         # soup = BeautifulSoup(requests.get(class_item.get('href')).text, 'html.parser')
-#         # print("DETAIL:::", soup.select('h2'))
-#
-#     return data
-
-
 # selenium ver.
-def parse_info():
+def parse_info_php():
+    base_url = "https://www.php.net/manual/en/reserved.interfaces.php"
+    driver = wd.Chrome(executable_path='/usr/local/bin/chromedriver')
+
+    ### access site [GET]
+    driver.get(base_url)
+    ### implicit waits
+    driver.implicitly_wait(5)
+
+    ### scrap class name and link to detail page
+    link_list = driver.find_element_by_id('reserved.interfaces').find_elements_by_css_selector('li')
+    link_data = [];
+    for link_item in link_list:
+        link_data.append(ClassLink(class_name=link_item.text,
+                                   link=link_item.find_element_by_css_selector('a').get_attribute('href')))
+
+    class_data = [];
+    for class_item in link_data:
+
+        ### access detail class page
+        driver.get(class_item.link)
+        ### implicit waits
+        driver.implicitly_wait(5)
+
+        if 'class' in driver.find_element_by_class_name('title').text:
+            method_list = driver.find_elements_by_class_name('methodsynopsis')
+            for method_item in method_list:
+                class_data.append(ClassInfo(
+                    language_name='php',
+                    class_name=class_item.class_name,
+                    link=class_item.link,
+                    method_name=method_item.find_element_by_class_name('methodname').text,
+                    param_name= '' if method_item.find_element_by_class_name('methodparam').text == 'void' else method_item.find_element_by_class_name('methodparam').text,
+                    # TODO: edit score?, pub_date, etc
+                    score=-1,
+                    pub_date=timezone.now(),
+                    etc=""
+                ))
+
+        driver.back()
+        ### implicit waits
+        driver.implicitly_wait(5)
+
+    return class_data
+
+def parse_info_java():
     base_url = 'https://docs.oracle.com/javase/10/docs/api/allclasses-noframe.html'
     driver = wd.Chrome(executable_path='/usr/local/bin/chromedriver')
 
@@ -81,9 +103,8 @@ def parse_info():
     link_list = driver.find_elements_by_css_selector('li')
     link_data = []; i = 0;
     for link_item in link_list:
-        print(i, "ALL:::class_name:::", link_item.text) ### class name
-        # print(i, "ALL:::link:::", link_item.find_element_by_css_selector('a').get_attribute('href')) ### link
-        link_data.append(ClassLink(class_name=link_item.text, link=link_item.find_element_by_css_selector('a').get_attribute('href')))
+        link_data.append(ClassLink(class_name=link_item.text,
+                                   link=link_item.find_element_by_css_selector('a').get_attribute('href')))
         i += 1
         # TODO: remove flag
         if i >= 10: break
@@ -97,14 +118,12 @@ def parse_info():
         ### implicit waits
         driver.implicitly_wait(5)
 
-        if (driver.find_element_by_id('method.summary').find_element_by_xpath("..").find_elements_by_tag_name('table')):
+        if driver.find_element_by_id('method.summary').find_element_by_xpath("..").find_elements_by_tag_name('table'):
             method_data = driver.find_element_by_id('method.summary').find_element_by_xpath("..").find_element_by_tag_name('table')
-            # print(i, "DETAIL:::class_name:::", class_item.class_name)
-            # print(i, "DETAIL:::link:::", class_item.link)
 
             method_list = method_data.find_elements_by_class_name('colSecond')
             for j in range(1, len(method_list)):
-                print(method_list[j].text)
+
                 ### insert class data into ClassInfo Object List
                 class_data.append(ClassInfo(
                     language_name='java',
@@ -118,8 +137,6 @@ def parse_info():
                     pub_date=timezone.now(),
                     etc=""
                 ))
-        else:
-            print(i, "NO 'MEMEBER_SUMMARY' TABLE")
 
         i += 1
         driver.back()
@@ -133,12 +150,11 @@ def parse_info():
 
 # 이 명령어는 이 파일이 import가 아닌 python에서 직접 실행할 경우에만 아래 코드가 동작하도록 합니다.
 if __name__=='__main__':
-    # blog_data_dict = parse_info()
-    # for i in blog_data_dict:
-    #     BlogData(title=i.class_name, link=i.link).save()
-    all_languages_list = parse_info()
+
+    all_languages_list = parse_info_java()
+    all_languages_list.extend(parse_info_php())
     for item in all_languages_list:
-        item.toString()
+        # item.toString()
         AllLanguages(
             languageName=item.language_name,
             className=item.class_name,
