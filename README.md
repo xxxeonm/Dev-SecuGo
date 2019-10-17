@@ -32,14 +32,22 @@ Installation
 
 1. IBM Watson<br>
 To install, use pip or easy_install:<br>
-pip install --upgrade ibm-watson<br>
-or<br>
-easy_install --upgrade ibm-watson<br>
+```
+pip install --upgrade ibm-watson
+```
+or
+```
+easy_install --upgrade ibm-watson
+```
 Note the following: a) Versions prior to 3.0.0 can be installed using:<br>
-pip install --upgrade watson-developer-cloud<br>
+```
+pip install --upgrade watson-developer-cloud
+```
 
 2. Crawler(Selenium,Chromedrive)<br>
-pip install selenium<br>
+```
+pip install selenium
+```
 https://sites.google.com/a/chromium.org/chromedriver/downloads<br>
 
 <br><br>
