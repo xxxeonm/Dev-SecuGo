@@ -7,6 +7,7 @@ from django.http import HttpResponseRedirect
 from django.views.decorators.csrf import csrf_exempt
 from ibm_watson import NaturalLanguageUnderstandingV1
 from ibm_watson.natural_language_understanding_v1 import Features, EntitiesOptions, KeywordsOptions
+from ibm_cloud_sdk_core.authenticators import IAMAuthenticator
 
 def index(request):
     return render(request, 'templates/index.html')
@@ -31,11 +32,20 @@ semantic_roles = []
 
 
 def learn(request):
+    """
     natural_language_understanding = NaturalLanguageUnderstandingV1(
         version='2019-07-12',
         iam_apikey='FZxffQMR704hKD0dgFXEC8T0L0FFkhWzNImrOWPG6ZVh',
         url='https://gateway.watsonplatform.net/natural-language-understanding/api'
     )
+    """
+    authenticator = IAMAuthenticator('FZxffQMR704hKD0dgFXEC8T0L0FFkhWzNImrOWPG6ZVh')
+    natural_language_understanding = NaturalLanguageUnderstandingV1(
+        version='2019-07-12',
+        authenticator=authenticator
+    )
+    natural_language_understanding.set_service_url('https://gateway.watsonplatform.net/natural-language-understanding/api')
+
     textinput = request.POST.get('a')
 
     response = natural_language_understanding.analyze(
