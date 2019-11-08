@@ -39,12 +39,16 @@ def learn(request):
         url='https://gateway.watsonplatform.net/natural-language-understanding/api'
     )
     """
-    authenticator = IAMAuthenticator('FZxffQMR704hKD0dgFXEC8T0L0FFkhWzNImrOWPG6ZVh')
-    natural_language_understanding = NaturalLanguageUnderstandingV1(
-        version='2019-07-12',
-        authenticator=authenticator
-    )
-    natural_language_understanding.set_service_url('https://gateway.watsonplatform.net/natural-language-understanding/api')
+    try:
+        authenticator = IAMAuthenticator('FZxffQMR704hKD0dgFXEC8T0L0FFkhWzNImrOWPG6ZVh')
+        natural_language_understanding = NaturalLanguageUnderstandingV1(
+            version='2019-07-12',
+            authenticator=authenticator
+        )
+        natural_language_understanding.set_service_url('https://gateway.watsonplatform.net/natural-language-understanding/api')
+
+    except expression as identifier:
+        print("Watson Api connection error!")
 
     textinput = request.POST.get('a')
 
