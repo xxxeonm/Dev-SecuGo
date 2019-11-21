@@ -10,6 +10,7 @@ from ibm_watson.natural_language_understanding_v1 import Features, EntitiesOptio
 from ibm_cloud_sdk_core.authenticators import IAMAuthenticator
 from nltk.tokenize import sent_tokenize, word_tokenize
 
+source_catch_lists = []
 
 def index(request):
     return render(request, 'templates/index.html')
@@ -76,7 +77,8 @@ def learn(request):
     
             if j == M: 
                 print ("Found pattern at index"+str(i-j))
-                print (txt)
+                source_catch_lists.append(txt)
+                print(source_catch_lists)
                 j = lps[j-1] 
     
             # mismatch after j matches 
@@ -176,7 +178,7 @@ def learn(request):
     count = count + 1
     data = Data(seq=count, keywords=Content['keywords']['text'][0], entities=Content['entities']['text'],
                 categories=Content['categories']['text'],
-                desc=semantic_roles[0].__str__().split('"'), source='', etc='')
+                desc=semantic_roles[0].__str__().split('"'), source=source_catch_lists, etc='')
     data.save()
     print("saved!")
     reset(Content)
