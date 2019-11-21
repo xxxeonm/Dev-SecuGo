@@ -11,6 +11,7 @@ from ibm_cloud_sdk_core.authenticators import IAMAuthenticator
 from nltk.tokenize import sent_tokenize, word_tokenize
 
 source_catch_lists = []
+pattern = ""
 
 def index(request):
     return render(request, 'templates/index.html')
@@ -178,7 +179,7 @@ def learn(request):
     count = count + 1
     data = Data(seq=count, keywords=Content['keywords']['text'][0], entities=Content['entities']['text'],
                 categories=Content['categories']['text'],
-                desc=semantic_roles[0].__str__().split('"'), source=source_catch_lists, etc='')
+                desc=semantic_roles[0].__str__().split('"'), source=source_catch_lists, method=pattern, etc='')
     data.save()
     print("saved!")
     reset(Content)
