@@ -12,6 +12,7 @@ from django.utils import timezone
 from s_parser.models import AllLanguages
 from s_parser.models import BlogData
 
+
 class ClassLink:
     class_name = ""
     link = ""
@@ -45,7 +46,7 @@ class ClassInfo:
 
 # javascript parser
 def js_parse():
-    driver = wd.Chrome('C:\\Users\\강민철\\Desktop\\crawling_practice\\chromedriver')
+    driver = wd.Chrome(executable_path='/usr/local/bin/chromedriver')
     driver.implicitly_wait(3)
 
     driver.get('https://devdocs.io/javascript/')

@@ -49,7 +49,16 @@ pip install --upgrade watson-developer-cloud
 pip install selenium
 ```
 https://sites.google.com/a/chromium.org/chromedriver/downloads<br>
+```
 
+3. NLTK - For tokenize sentence
+```
+pip install nltk<br>
+```
+import nltk <br>
+nltk.download('punkt') <br>
+```
+https://www.nltk.org/data.html<br>
 <br><br>
 
 Development Background
