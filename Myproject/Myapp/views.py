@@ -112,12 +112,11 @@ def learn(request):
                     lps[i] = 0
                     i += 1
     
-    pat = "getParameter"
+    #input all languages functions/methods name here
+    pattern = "getParameter"
 
-    #print(sent_tokenize(textinput))
     for i in sent_tokenize(textinput): 
-        #print(i)
-        KMPSearch(pat, i)
+        KMPSearch(pattern, i)
     """Catch the code line!!! end"""
 
 
