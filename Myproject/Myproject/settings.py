@@ -9,10 +9,7 @@ https://docs.djangoproject.com/en/2.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.1/ref/settings/
 """
-
 import os
-import pymysql
-pymysql.install_as_MySQLdb()
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -78,14 +75,6 @@ WSGI_APPLICATION = 'Myproject.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'secugo',
-        'USER': 'secugo',
-        'PASSWORD': 'password',
-        'HOST': 'localhost',
-        'PORT': '3306',
-    },
-    'compareSource':{
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'secugo',
         'USER': 'secugo',

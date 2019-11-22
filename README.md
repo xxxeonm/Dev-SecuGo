@@ -30,16 +30,35 @@ To address this, Secugo will creates a "test case."
 Installation
 ---------------
 
-To install, use pip or easy_install:
-
+1. IBM Watson<br>
+To install, use pip or easy_install:<br>
+```
 pip install --upgrade ibm-watson
+```
 or
-
+```
 easy_install --upgrade ibm-watson
-Note the following: a) Versions prior to 3.0.0 can be installed using:
-
+```
+Note the following: a) Versions prior to 3.0.0 can be installed using:<br>
+```
 pip install --upgrade watson-developer-cloud
+```
 
+2. Crawler(Selenium,Chromedrive)<br>
+```
+pip install selenium
+```
+https://sites.google.com/a/chromium.org/chromedriver/downloads<br>
+```
+
+3. NLTK - For tokenize sentence
+```
+pip install nltk<br>
+```
+import nltk <br>
+nltk.download('punkt') <br>
+```
+https://www.nltk.org/data.html<br>
 <br><br>
 
 Development Background
@@ -116,5 +135,6 @@ Used API
 
 License
 --------------
-© All rights reserved. Thanks team. Seongbeom Park. Wonhee Jeong. Seungkyu Lee. Heesui Jang.
+© All rights reserved. <br>
+Thanks team. Seongbeom Park. Wonhee Jeong. Seungkyu Lee. Heesui Jang. Sunmin Han. Hwajin Lee. Minchul Kang.
 * 본 프로젝트는 한이음 멘토링 프로젝트로 진행되었습니다.

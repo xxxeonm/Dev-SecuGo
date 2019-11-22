@@ -12,6 +12,7 @@ from django.utils import timezone
 from s_parser.models import AllLanguages
 from s_parser.models import BlogData
 
+
 class ClassLink:
     class_name = ""
     link = ""
@@ -43,10 +44,86 @@ class ClassInfo:
         self.pub_date = pub_date
         self.etc = etc
 
+# javascript parser
+def js_parse():
+    driver = wd.Chrome(executable_path='/usr/local/bin/chromedriver')
+    driver.implicitly_wait(3)
+
+    driver.get('https://devdocs.io/javascript/')
+    driver.implicitly_wait(5)
+
+    data = []
+
+    classlist = driver.find_elements_by_css_selector('._list-sub ._list-item svg')
+    linkidx = len(classlist)
+
+    # find class name 
+    classes = driver.find_elements_by_css_selector('._list-sub > ._list-item > ._list-text')
+
+    startidx = 1
+
+    for x in range(linkidx):
+
+        # open class list bar
+        classlist[x].click()		
+        classname = classes[x].text
+
+        # find method name
+        methodlist = driver.find_elements_by_tag_name('section div div div a')
+        methodidx = len(methodlist)
+
+        for y in range(startidx, methodidx):
+            param_ok = False
+
+            method = methodlist[y].text
+            idx = method.find('.')
+            if(idx != -1):
+                methodname = method[idx+1:]
+            else:
+                continue
+
+            # find parameters
+            try:
+                methodlist[y].click()
+                driver.implicitly_wait(5)
+                try:
+                    param_ok = driver.find_element_by_id('Parameters')
+
+                    if(param_ok):
+                        params = driver.find_elements_by_css_selector('main div dl > dt > code')
+                        for param in params:
+                            param = param.text	
+                    else:
+                        param = ""
+
+                    data.append(ClassInfo(
+                        language_name='javascript',
+                        class_name=classname,
+                        link="",
+                        method_name=methodname,
+                        param_name=param,
+                        score=-1,
+                        pub_date=timezone.now(),
+                        etc=-1
+                    ))
+
+                except exceptions.NoSuchElementException:
+                    continue
+
+            except exceptions.ElementClickInterceptedException:
+                continue
+
+        startidx = methodidx+1
+
+    driver.close()
+    driver.quit()
+
+    return data
 
 # selenium ver.
 def parse_info_php():
     base_url = "https://www.php.net/manual/en/reserved.interfaces.php"
+    #Must input your chromedriver path below!!
     driver = wd.Chrome(executable_path='/usr/local/bin/chromedriver')
 
     ### access site [GET]
@@ -92,6 +169,7 @@ def parse_info_php():
 
 def parse_info_java():
     base_url = 'https://docs.oracle.com/javase/10/docs/api/allclasses-noframe.html'
+    #Must input your chromedriver path below!!
     driver = wd.Chrome(executable_path='/usr/local/bin/chromedriver')
 
     ### access site [GET]
@@ -155,6 +233,20 @@ if __name__=='__main__':
     all_languages_list.extend(parse_info_php())
     for item in all_languages_list:
         # item.toString()
+        AllLanguages(
+            languageName=item.language_name,
+            className=item.class_name,
+            methodName=item.method_name,
+            parameterName=item.param_name,
+            link=item.link,
+            score=item.score,
+            pub_date=item.pub_date,
+            etc=item.etc
+        ).save()
+    
+    all_languages_list = js_parse()
+    for item in all_languages_list:
+        item.toString()
         AllLanguages(
             languageName=item.language_name,
             className=item.class_name,
